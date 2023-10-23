@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Homepage</title>
+    <title>Toko Coyy</title>
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
