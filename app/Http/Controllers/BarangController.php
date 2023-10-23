@@ -16,7 +16,7 @@ class BarangController extends Controller
     public function store(Request $request)
     {
         $item = Barang::create($request->post());
-        return response()->json(['message' => 'item Created Successfully!!', 'item' => $item]);
+        return response()->json(['message' => 'Data Berhasil Ditambah!!', 'item' => $item]);
     }
 
     public function show($id)
@@ -29,13 +29,13 @@ class BarangController extends Controller
     {
         $item = Barang::findOrFail($id);
         $item->fill($request->post())->save();
-        return response()->json(['message' => 'Data Updated Successfully!!', 'item' => $item]);
+        return response()->json(['message' => 'Data Berhasil Diubah!!', 'item' => $item]);
     }
 
     public function destroy($id)
     {
         $item = Barang::findOrFail($id);
         $item->delete();
-        return response()->json(['message' => 'Data Deleted Successfully!!']);
+        return response()->json(['message' => 'Data Berhasil Dihapus Successfully!!']);
     }
 }

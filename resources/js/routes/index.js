@@ -1,7 +1,6 @@
 import Homepage from '../pages/Homepage.vue'
 import About from '../pages/About.vue'
 import Contact from '../pages/Contact.vue'
-import BarangIndex from '../pages/barang/Index.vue'
 
 export default {
     mode: 'history',
@@ -21,15 +20,10 @@ export default {
             name: 'contact',
             component: Contact,
         },
-        // {
-        //     path: '/contact',
-        //     name: 'contact',
-        //     component: Contact,
-        // },
         {
             path: '/barang',
             name: 'barang-index',
-            component: BarangIndex
+            component: () => import('../pages/barang/Index.vue' /* webpackChunkName: "resource/js/components/pages/barang/index" */)
         },
     ]
 }
