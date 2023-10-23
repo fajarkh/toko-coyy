@@ -1,6 +1,6 @@
 <template>
     <v-footer color="indigo" app>
-        <span class="white--text">Copyright &copy; Your Website 2020</span>
+        <span class="white--text">Copyright &copy; Toko Coyy 2023</span>
     </v-footer>
 </template>
 

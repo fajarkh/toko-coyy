@@ -19838,7 +19838,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("v-footer", { attrs: { color: "indigo", app: "" } }, [
     _c("span", { staticClass: "white--text" }, [
-      _vm._v("Copyright © Your Website 2020")
+      _vm._v("Copyright © Toko Coyy 2023")
     ])
   ])
 }

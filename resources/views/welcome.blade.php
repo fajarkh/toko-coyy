@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Toko Coyy</title>
+    <title>{{ ucwords(str_replace('_', ' ', config('app.name'))) }}</title>
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
