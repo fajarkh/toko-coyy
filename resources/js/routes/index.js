@@ -30,5 +30,10 @@ export default {
             name: 'kategori-index',
             component: () => import('../pages/kategori/Index.vue' /* webpackChunkName: "resource/js/components/pages/kategori/index" */)
         },
+        {
+            path: '/jabatan',
+            name: 'jabatan-index',
+            component: () => import('../pages/jabatan/Index.vue' /* webpackChunkName: "resource/js/components/pages/jabatan/index" */)
+        },
     ]
 }

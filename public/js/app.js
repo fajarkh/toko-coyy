@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "" + ({"resource/js/components/pages/barang/index":"resource/js/components/pages/barang/index","resource/js/components/pages/kategori/index":"resource/js/components/pages/kategori/index"}[chunkId]||chunkId) + ".js"
+/******/ 		return __webpack_require__.p + "" + ({"resource/js/components/pages/barang/index":"resource/js/components/pages/barang/index","resource/js/components/pages/jabatan/index":"resource/js/components/pages/jabatan/index","resource/js/components/pages/kategori/index":"resource/js/components/pages/kategori/index"}[chunkId]||chunkId) + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -20659,6 +20659,21 @@ var render = function() {
               _c(
                 "v-list-item-content",
                 [_c("v-list-item-title", [_vm._v("Kategori")])],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-list-item",
+            { attrs: { link: "", exact: "", to: { name: "jabatan-index" } } },
+            [
+              _c("v-list-item-action", [_c("v-icon", [_vm._v("mdi-cube")])], 1),
+              _vm._v(" "),
+              _c(
+                "v-list-item-content",
+                [_c("v-list-item-title", [_vm._v("Jabatan")])],
                 1
               )
             ],
@@ -80499,6 +80514,12 @@ __webpack_require__.r(__webpack_exports__);
     name: 'kategori-index',
     component: function component() {
       return __webpack_require__.e(/*! import() | resource/js/components/pages/kategori/index */ "resource/js/components/pages/kategori/index").then(__webpack_require__.bind(null, /*! ../pages/kategori/Index.vue */ "./resources/js/pages/kategori/Index.vue"));
+    }
+  }, {
+    path: '/jabatan',
+    name: 'jabatan-index',
+    component: function component() {
+      return __webpack_require__.e(/*! import() | resource/js/components/pages/jabatan/index */ "resource/js/components/pages/jabatan/index").then(__webpack_require__.bind(null, /*! ../pages/jabatan/Index.vue */ "./resources/js/pages/jabatan/Index.vue"));
     }
   }]
 });
