@@ -20,15 +20,7 @@
                                             </v-text-field>
                                         </v-col>
                                         <v-col cols="12">
-                                            <v-text-field label="Merek*" v-model="formData.merek">
-                                            </v-text-field>
-                                        </v-col>
-                                        <v-col cols="12">
-                                            <v-text-field label="Kategori*" v-model="formData.kategori">
-                                            </v-text-field>
-                                        </v-col>
-                                        <v-col cols="12">
-                                            <v-text-field label="Satuan*" v-model="formData.satuan">
+                                            <v-text-field label="Deskripsi" v-model="formData.deskripsi">
                                             </v-text-field>
                                         </v-col>
                                     </v-row>
@@ -51,18 +43,12 @@
                 <thead>
                     <tr>
                         <th class="text-left">Nama</th>
-                        <th class="text-left">Merek</th>
-                        <th class="text-left">Kategori</th>
-                        <th class="text-left">Satuan</th>
                         <th class="text-left">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="item in items" :key="item.id">
                         <td>{{ item.nama }}</td>
-                        <td>{{ item.merek }}</td>
-                        <td>{{ item.kategori }}</td>
-                        <td>{{ item.satuan }}</td>
                         <td>
                             <v-btn @click.prevent="edit(item)">Edit</v-btn>
                             <v-btn color="error" @click.prevent="deleteItem(item.id)">Hapus</v-btn>
@@ -78,7 +64,7 @@
 const dialog = false;
 
 export default {
-    name: 'BarangIndex',
+    name: 'KategoriIndex',
     components: {
     },
     data() {
@@ -90,9 +76,7 @@ export default {
             formData: {
                 id: '',
                 nama: '',
-                merek: '',
-                kategori: '',
-                satuan: '',
+                deskripsi: '',
             },
         }
     },
@@ -101,7 +85,7 @@ export default {
     },
     methods: {
         getItems() {
-            axios.get('/api/barang').then(res => {
+            axios.get('/api/kategori').then(res => {
                 this.items = res.data
             }).catch((error) => {
                 console.log(error);
@@ -112,11 +96,9 @@ export default {
             if (this.$refs.form.validate()) {
                 let postData = new FormData();
                 postData.append("nama", this.formData.nama);
-                postData.append("merek", this.formData.merek);
-                postData.append("satuan", this.formData.satuan);
-                postData.append("kategori", this.formData.kategori);
+                postData.append("deskripsi", this.formData.deskripsi);
 
-                axios.post('/api/barang', postData).then(res => {
+                axios.post('/api/kategori', postData).then(res => {
                     this.dialog = false;
                     this.resetForm(); this.getItems();
                     this.$swal({
@@ -135,11 +117,9 @@ export default {
             let postData = new FormData();
             postData.append('_method', 'PUT');
             postData.append("nama", this.formData.nama);
-            postData.append("merek", this.formData.merek);
-            postData.append("kategori", this.formData.kategori);
-            postData.append("satuan", this.formData.satuan);
+            postData.append("deskripsi", this.formData.deskripsi);
 
-            axios.post(`/api/barang/${id}`, postData).then(res => {
+            axios.post(`/api/kategori/${id}`, postData).then(res => {
                 this.dialog = false;
                 this.resetForm(); this.getItems();
 
@@ -164,7 +144,7 @@ export default {
                 confirmButtonText: 'Iya, Lanjutkan!'
             }).then((result) => {
                 if (result.value) {
-                    axios.delete(`/api/barang/${id}`).then(res => {
+                    axios.delete(`/api/kategori/${id}`).then(res => {
                         console.log(res);
                         this.getItems();
                         this.$swal({
@@ -187,17 +167,13 @@ export default {
             this.formTitle = 'Edit';
             this.formData.id = item.id;
             this.formData.nama = item.nama;
-            this.formData.merek = item.merek;
-            this.formData.kategori = item.kategori;
-            this.formData.satuan = item.satuan;
+            this.formData.deskripsi = item.deskripsi;
         },
         resetForm() {
             this.formTitle = 'Tambah';
             this.formData.id = '';
             this.formData.nama = '';
-            this.formData.merek = '';
-            this.formData.kategori = '';
-            this.formData.satuan = '';
+            this.formData.deskripsi = '';
         },
     }
 }

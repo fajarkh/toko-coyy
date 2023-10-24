@@ -25,5 +25,10 @@ export default {
             name: 'barang-index',
             component: () => import('../pages/barang/Index.vue' /* webpackChunkName: "resource/js/components/pages/barang/index" */)
         },
+        {
+            path: '/kategori',
+            name: 'kategori-index',
+            component: () => import('../pages/kategori/Index.vue' /* webpackChunkName: "resource/js/components/pages/kategori/index" */)
+        },
     ]
 }
