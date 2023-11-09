@@ -41,6 +41,12 @@
                     <v-list-item-title>Jabatan</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
+            <v-list-item link exact :to="{ name: 'pelanggan-index' }">
+                <v-list-item-action><v-icon>mdi-account-star</v-icon></v-list-item-action>
+                <v-list-item-content>
+                    <v-list-item-title>Pelanggan</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
         </v-list>
     </v-navigation-drawer>
 </template>

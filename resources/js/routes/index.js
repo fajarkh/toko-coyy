@@ -35,5 +35,10 @@ export default {
             name: 'jabatan-index',
             component: () => import('../pages/jabatan/Index.vue' /* webpackChunkName: "resource/js/components/pages/jabatan/index" */)
         },
+        {
+            path: '/pelanggan',
+            name: 'pelanggan-index',
+            component: () => import('../pages/pelanggan/Index.vue' /* webpackChunkName: "resource/js/components/pages/pelanggan/index" */)
+        },
     ]
 }

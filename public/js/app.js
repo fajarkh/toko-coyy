@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "" + ({"resource/js/components/pages/barang/index":"resource/js/components/pages/barang/index","resource/js/components/pages/jabatan/index":"resource/js/components/pages/jabatan/index","resource/js/components/pages/kategori/index":"resource/js/components/pages/kategori/index"}[chunkId]||chunkId) + ".js"
+/******/ 		return __webpack_require__.p + "" + ({"resource/js/components/pages/barang/index":"resource/js/components/pages/barang/index","resource/js/components/pages/jabatan/index":"resource/js/components/pages/jabatan/index","resource/js/components/pages/kategori/index":"resource/js/components/pages/kategori/index","resource/js/components/pages/pelanggan/index":"resource/js/components/pages/pelanggan/index"}[chunkId]||chunkId) + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -2085,6 +2085,12 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -20674,6 +20680,25 @@ var render = function() {
               _c(
                 "v-list-item-content",
                 [_c("v-list-item-title", [_vm._v("Jabatan")])],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-list-item",
+            { attrs: { link: "", exact: "", to: { name: "pelanggan-index" } } },
+            [
+              _c(
+                "v-list-item-action",
+                [_c("v-icon", [_vm._v("mdi-account-star")])],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-list-item-content",
+                [_c("v-list-item-title", [_vm._v("Pelanggan")])],
                 1
               )
             ],
@@ -80520,6 +80545,12 @@ __webpack_require__.r(__webpack_exports__);
     name: 'jabatan-index',
     component: function component() {
       return __webpack_require__.e(/*! import() | resource/js/components/pages/jabatan/index */ "resource/js/components/pages/jabatan/index").then(__webpack_require__.bind(null, /*! ../pages/jabatan/Index.vue */ "./resources/js/pages/jabatan/Index.vue"));
+    }
+  }, {
+    path: '/pelanggan',
+    name: 'pelanggan-index',
+    component: function component() {
+      return __webpack_require__.e(/*! import() | resource/js/components/pages/pelanggan/index */ "resource/js/components/pages/pelanggan/index").then(__webpack_require__.bind(null, /*! ../pages/pelanggan/Index.vue */ "./resources/js/pages/pelanggan/Index.vue"));
     }
   }]
 });
