@@ -1,5 +1,56 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["resource/js/components/pages/barang/index"],{
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/barang/Form.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/barang/Form.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _eventBus_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./eventBus.js */ "./resources/js/pages/barang/eventBus.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'BarangForm',
+  props: ['formData'],
+  data: function data() {
+    return {
+      allError: []
+    };
+  },
+  created: function created() {
+    var _this = this;
+
+    _eventBus_js__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$on('sendErrors', function (val) {
+      _this.allError = val;
+    });
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/barang/Index.vue?vue&type=script&lang=js&":
 /*!******************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/barang/Index.vue?vue&type=script&lang=js& ***!
@@ -9,28 +60,8 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+/* harmony import */ var _Form_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Form.vue */ "./resources/js/pages/barang/Form.vue");
+/* harmony import */ var _eventBus_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./eventBus.js */ "./resources/js/pages/barang/eventBus.js");
 //
 //
 //
@@ -86,15 +117,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 var dialog = false;
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'BarangIndex',
-  components: {},
+  name: 'barangIndex',
+  components: {
+    FormLayout: _Form_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
   data: function data() {
     return {
       items: [],
       dialog: false,
       formTitle: 'Tambah Data',
-      errorMessage: '',
       formData: {
         id: '',
         nama: '',
@@ -108,73 +142,84 @@ var dialog = false;
     this.getItems();
   },
   methods: {
-    getItems: function getItems() {
+    resetForm: function resetForm(type) {
       var _this = this;
 
+      this.formTitle = type !== null && type !== void 0 ? type : 'Tambah';
+      Object.keys(this.formData).forEach(function (key) {
+        _this.formData[key] = '';
+      });
+      _eventBus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$emit('sendErrors', []);
+    },
+    getItems: function getItems() {
+      var _this2 = this;
+
       axios.get('/api/barang').then(function (res) {
-        _this.items = res.data;
+        console.log(res.data);
+        _this2.items = res.data.items;
       })["catch"](function (error) {
-        console.log(error);
-        _this.errorMessage = error.response.data.message;
+        _this2.errorMessage = error.response.data.message;
       });
     },
     addItem: function addItem() {
-      var _this2 = this;
+      var _this3 = this;
 
       if (this.$refs.form.validate()) {
-        var postData = new FormData();
-        postData.append("nama", this.formData.nama);
-        postData.append("merek", this.formData.merek);
-        postData.append("satuan", this.formData.satuan);
-        postData.append("kategori", this.formData.kategori);
-        axios.post('/api/barang', postData).then(function (res) {
-          _this2.dialog = false;
+        var formData = new FormData();
+        var item = this.formData;
 
-          _this2.resetForm();
+        for (var key in item = this.formData) {
+          formData.append(key, item[key]);
+        }
 
-          _this2.getItems();
+        axios.post('/api/barang', formData).then(function (res) {
+          _this3.dialog = false;
 
-          _this2.$swal({
+          _this3.resetForm();
+
+          _this3.getItems();
+
+          _this3.$swal({
             text: res.data.message,
             icon: res.status === 200 ? 'success' : 'warning',
             timer: 2000,
             showConfirmButton: false
           });
         }, function (error) {
-          console.log(error.response.data);
-          _this2.errorMessage = error.response.data.message;
+          _eventBus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$emit('sendErrors', error.response.data.errors);
         });
       }
     },
     updateItem: function updateItem(id) {
-      var _this3 = this;
+      var _this4 = this;
 
-      var postData = new FormData();
-      postData.append('_method', 'PUT');
-      postData.append("nama", this.formData.nama);
-      postData.append("merek", this.formData.merek);
-      postData.append("kategori", this.formData.kategori);
-      postData.append("satuan", this.formData.satuan);
-      axios.post("/api/barang/".concat(id), postData).then(function (res) {
-        _this3.dialog = false;
+      var formData = new FormData();
+      formData.append('_method', 'PUT');
+      var item = this.formData;
 
-        _this3.resetForm();
+      for (var key in item) {
+        formData.append(key, item[key] == 'null' ? null : item[key]);
+      }
 
-        _this3.getItems();
+      axios.post("/api/barang/".concat(id), formData).then(function (res) {
+        _this4.dialog = false;
 
-        _this3.$swal({
+        _this4.resetForm();
+
+        _this4.getItems();
+
+        _this4.$swal({
           text: res.data.message,
           icon: res.status === 200 ? 'success' : 'warning',
           timer: 2000,
           showConfirmButton: false
         });
       }, function (error) {
-        console.log(error.response.data);
-        _this3.errorMessage = error.response.data.message;
+        _eventBus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$emit('sendErrors', error.response.data.errors);
       });
     },
     deleteItem: function deleteItem(id) {
-      var _this4 = this;
+      var _this5 = this;
 
       this.$swal({
         title: 'Kamu Yakin?',
@@ -187,46 +232,137 @@ var dialog = false;
       }).then(function (result) {
         if (result.value) {
           axios["delete"]("/api/barang/".concat(id)).then(function (res) {
-            console.log(res);
+            _this5.getItems();
 
-            _this4.getItems();
-
-            _this4.$swal({
+            _this5.$swal({
               text: res.data.message,
               icon: res.status === 200 ? 'success' : 'warning',
               timer: 2000,
               showConfirmButton: false
             });
           })["catch"](function (error) {
-            console.log(error);
-            _this4.errorMessage = error.response.data.message;
+            _eventBus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$emit('sendErrors', error.response.data.errors);
           });
         }
       });
     },
     tambah: function tambah() {
       this.dialog = true;
-      this.resetForm();
+      this.resetForm('Tambah');
     },
     edit: function edit(item) {
-      this.dialog = true;
+      this.resetForm('Edit');
       this.formTitle = 'Edit';
-      this.formData.id = item.id;
-      this.formData.nama = item.nama;
-      this.formData.merek = item.merek;
-      this.formData.kategori = item.kategori;
-      this.formData.satuan = item.satuan;
-    },
-    resetForm: function resetForm() {
-      this.formTitle = 'Tambah';
-      this.formData.id = '';
-      this.formData.nama = '';
-      this.formData.merek = '';
-      this.formData.kategori = '';
-      this.formData.satuan = '';
+      this.dialog = true;
+
+      for (var key in item) {
+        if (typeof this.formData[key] !== 'undefined') {
+          this.formData[key] = item[key];
+        }
+      }
     }
   }
 });
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/barang/Form.vue?vue&type=template&id=5d8cd79a&":
+/*!*********************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/barang/Form.vue?vue&type=template&id=5d8cd79a& ***!
+  \*********************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-row",
+    [
+      _c(
+        "v-col",
+        { attrs: { cols: "12" } },
+        [
+          _c("v-text-field", {
+            attrs: { label: "Nama*" },
+            model: {
+              value: _vm.formData.nama,
+              callback: function($$v) {
+                _vm.$set(_vm.formData, "nama", $$v)
+              },
+              expression: "formData.nama"
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-col",
+        { attrs: { cols: "12" } },
+        [
+          _c("v-text-field", {
+            attrs: { label: "Merek*" },
+            model: {
+              value: _vm.formData.merek,
+              callback: function($$v) {
+                _vm.$set(_vm.formData, "merek", $$v)
+              },
+              expression: "formData.merek"
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-col",
+        { attrs: { cols: "12" } },
+        [
+          _c("v-text-field", {
+            attrs: { label: "Kategori*" },
+            model: {
+              value: _vm.formData.kategori,
+              callback: function($$v) {
+                _vm.$set(_vm.formData, "kategori", $$v)
+              },
+              expression: "formData.kategori"
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-col",
+        { attrs: { cols: "12" } },
+        [
+          _c("v-text-field", {
+            attrs: { label: "Satuan*" },
+            model: {
+              value: _vm.formData.satuan,
+              callback: function($$v) {
+                _vm.$set(_vm.formData, "satuan", $$v)
+              },
+              expression: "formData.satuan"
+            }
+          })
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
 
 /***/ }),
 
@@ -289,130 +425,9 @@ var render = function() {
                               _c(
                                 "v-container",
                                 [
-                                  this.errorMessage != ""
-                                    ? _c(
-                                        "v-alert",
-                                        {
-                                          attrs: {
-                                            prominent: "",
-                                            type: "error"
-                                          }
-                                        },
-                                        [
-                                          _c(
-                                            "v-row",
-                                            { attrs: { align: "center" } },
-                                            [
-                                              _c(
-                                                "v-col",
-                                                { staticClass: "grow" },
-                                                [
-                                                  _vm._v(
-                                                    _vm._s(this.errorMessage)
-                                                  )
-                                                ]
-                                              )
-                                            ],
-                                            1
-                                          )
-                                        ],
-                                        1
-                                      )
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-row",
-                                    [
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12" } },
-                                        [
-                                          _c("v-text-field", {
-                                            attrs: { label: "Nama*" },
-                                            model: {
-                                              value: _vm.formData.nama,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.formData,
-                                                  "nama",
-                                                  $$v
-                                                )
-                                              },
-                                              expression: "formData.nama"
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12" } },
-                                        [
-                                          _c("v-text-field", {
-                                            attrs: { label: "Merek*" },
-                                            model: {
-                                              value: _vm.formData.merek,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.formData,
-                                                  "merek",
-                                                  $$v
-                                                )
-                                              },
-                                              expression: "formData.merek"
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12" } },
-                                        [
-                                          _c("v-text-field", {
-                                            attrs: { label: "Kategori*" },
-                                            model: {
-                                              value: _vm.formData.kategori,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.formData,
-                                                  "kategori",
-                                                  $$v
-                                                )
-                                              },
-                                              expression: "formData.kategori"
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12" } },
-                                        [
-                                          _c("v-text-field", {
-                                            attrs: { label: "Satuan*" },
-                                            model: {
-                                              value: _vm.formData.satuan,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.formData,
-                                                  "satuan",
-                                                  $$v
-                                                )
-                                              },
-                                              expression: "formData.satuan"
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      )
-                                    ],
-                                    1
-                                  )
+                                  _c("FormLayout", {
+                                    attrs: { formData: _vm.formData }
+                                  })
                                 ],
                                 1
                               )
@@ -508,7 +523,7 @@ var render = function() {
                 _c(
                   "tbody",
                   _vm._l(_vm.items, function(item) {
-                    return _c("tr", { key: item.id }, [
+                    return _c("tr", [
                       _c("td", [_vm._v(_vm._s(item.nama))]),
                       _vm._v(" "),
                       _c("td", [_vm._v(_vm._s(item.merek))]),
@@ -565,6 +580,75 @@ var render = function() {
 }
 var staticRenderFns = []
 render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./resources/js/pages/barang/Form.vue":
+/*!********************************************!*\
+  !*** ./resources/js/pages/barang/Form.vue ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Form_vue_vue_type_template_id_5d8cd79a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Form.vue?vue&type=template&id=5d8cd79a& */ "./resources/js/pages/barang/Form.vue?vue&type=template&id=5d8cd79a&");
+/* harmony import */ var _Form_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Form.vue?vue&type=script&lang=js& */ "./resources/js/pages/barang/Form.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Form_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Form_vue_vue_type_template_id_5d8cd79a___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Form_vue_vue_type_template_id_5d8cd79a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/pages/barang/Form.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/pages/barang/Form.vue?vue&type=script&lang=js&":
+/*!*********************************************************************!*\
+  !*** ./resources/js/pages/barang/Form.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Form.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/barang/Form.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/pages/barang/Form.vue?vue&type=template&id=5d8cd79a&":
+/*!***************************************************************************!*\
+  !*** ./resources/js/pages/barang/Form.vue?vue&type=template&id=5d8cd79a& ***!
+  \***************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_template_id_5d8cd79a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Form.vue?vue&type=template&id=5d8cd79a& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/barang/Form.vue?vue&type=template&id=5d8cd79a&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_template_id_5d8cd79a___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_template_id_5d8cd79a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
@@ -636,6 +720,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_86cdb31a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
+
+/***/ }),
+
+/***/ "./resources/js/pages/barang/eventBus.js":
+/*!***********************************************!*\
+  !*** ./resources/js/pages/barang/eventBus.js ***!
+  \***********************************************/
+/*! exports provided: EventBus */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventBus", function() { return EventBus; });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+
+var EventBus = new vue__WEBPACK_IMPORTED_MODULE_0___default.a();
 
 /***/ })
 

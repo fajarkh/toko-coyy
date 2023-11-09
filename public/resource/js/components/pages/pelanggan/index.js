@@ -37,20 +37,20 @@ __webpack_require__.r(__webpack_exports__);
   props: ['formData'],
   data: function data() {
     return {
+      allError: [],
       jkItems: [{
         state: 'Laki-laki',
         abbr: 'L'
       }, {
         state: 'Perempuan',
         abbr: 'P'
-      }],
-      allError: []
+      }]
     };
   },
   created: function created() {
     var _this = this;
 
-    _eventBus_js__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$on('changeValue', function (val) {
+    _eventBus_js__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$on('sendErrors', function (val) {
       _this.allError = val;
     });
   }
@@ -126,7 +126,6 @@ var dialog = false;
   data: function data() {
     return {
       items: [],
-      allError: [],
       dialog: false,
       formTitle: 'Tambah Data',
       formData: {
@@ -149,13 +148,14 @@ var dialog = false;
       Object.keys(this.formData).forEach(function (key) {
         _this.formData[key] = '';
       });
-      this.allError = [];
+      _eventBus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$emit('sendErrors', []);
     },
     getItems: function getItems() {
       var _this2 = this;
 
       axios.get('/api/pelanggan').then(function (res) {
-        _this2.items = res.data;
+        console.log(res.data);
+        _this2.items = res.data.items;
       })["catch"](function (error) {
         _this2.errorMessage = error.response.data.message;
       });
@@ -185,8 +185,7 @@ var dialog = false;
             showConfirmButton: false
           });
         }, function (error) {
-          _this3.allError = error.response.data.errors;
-          _eventBus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$emit('changeValue', _this3.allError);
+          _eventBus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$emit('sendErrors', error.response.data.errors);
         });
       }
     },
@@ -215,7 +214,7 @@ var dialog = false;
           showConfirmButton: false
         });
       }, function (error) {
-        _this4.allError = error.response.data.errors;
+        _eventBus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$emit('sendErrors', error.response.data.errors);
       });
     },
     deleteItem: function deleteItem(id) {
@@ -241,7 +240,7 @@ var dialog = false;
               showConfirmButton: false
             });
           })["catch"](function (error) {
-            _this5.allError = error.response.data.errors;
+            _eventBus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$emit('sendErrors', error.response.data.errors);
           });
         }
       });
@@ -520,7 +519,7 @@ var render = function() {
                 _c(
                   "tbody",
                   _vm._l(_vm.items, function(item) {
-                    return _c("tr", { key: item.id }, [
+                    return _c("tr", [
                       _c("td", [_vm._v(_vm._s(item.nama))]),
                       _vm._v(" "),
                       _c(

@@ -31,7 +31,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item in items" :key="item.id">
+                    <tr v-for="item in items">
                         <td>{{ item.nama }}</td>
                         <td>
                             <v-btn @click.prevent="edit(item)">Edit</v-btn>
@@ -48,6 +48,7 @@
 const dialog = false;
 import FormLayout from './Form.vue'
 import { EventBus } from './eventBus.js'
+
 export default {
     name: 'PelangganIndex',
     components: {
@@ -55,7 +56,7 @@ export default {
     },
     data() {
         return {
-            items: [], allError: [],
+            items: [],
             dialog: false,
             formTitle: 'Tambah Data',
             formData: {
@@ -76,11 +77,12 @@ export default {
             Object.keys(this.formData).forEach((key) => {
                 this.formData[key] = '';
             });
-            this.allError = [];
+            EventBus.$emit('sendErrors', []);
         },
         getItems() {
             axios.get('/api/pelanggan').then(res => {
-                this.items = res.data
+                console.log(res.data);
+                this.items = res.data.items;
             }).catch((error) => {
                 this.errorMessage = error.response.data.message;
             })
@@ -100,12 +102,9 @@ export default {
                         timer: 2000, showConfirmButton: false
                     })
                 }, (error) => {
-                    this.allError = error.response.data.errors;
-                    EventBus.$emit('changeValue', this.allError);
+                    EventBus.$emit('sendErrors', error.response.data.errors);
                 });
-
             }
-
         },
         updateItem(id) {
             let formData = new FormData();
@@ -125,7 +124,7 @@ export default {
                 })
 
             }, (error) => {
-                this.allError = error.response.data.errors;
+                EventBus.$emit('sendErrors', error.response.data.errors);
             });
         },
         deleteItem(id) {
@@ -142,7 +141,7 @@ export default {
                             timer: 2000, showConfirmButton: false
                         })
                     }).catch((error) => {
-                        this.allError = error.response.data.errors;
+                        EventBus.$emit('sendErrors', error.response.data.errors);
                     })
                 }
             })

@@ -20582,7 +20582,7 @@ var render = function() {
         }
       }),
       _vm._v(" "),
-      _c("v-toolbar-title", [_vm._v("Shop")])
+      _c("v-toolbar-title", [_vm._v("Toko Coyy")])
     ],
     1
   )

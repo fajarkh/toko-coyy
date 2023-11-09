@@ -26,15 +26,15 @@ export default {
     props: ['formData'],
     data() {
         return {
+            allError: [],
             jkItems: [
                 { state: 'Laki-laki', abbr: 'L' },
                 { state: 'Perempuan', abbr: 'P' },
             ],
-            allError: [],
         }
     },
     created() {
-        EventBus.$on('changeValue', (val) => { this.allError = val });
+        EventBus.$on('sendErrors', (val) => { this.allError = val });
     }
 }
 </script>

@@ -1,5 +1,47 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["resource/js/components/pages/jabatan/index"],{
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/jabatan/Form.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/jabatan/Form.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _eventBus_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./eventBus.js */ "./resources/js/pages/jabatan/eventBus.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'JabatanForm',
+  props: ['formData'],
+  data: function data() {
+    return {
+      allError: []
+    };
+  },
+  created: function created() {
+    var _this = this;
+
+    _eventBus_js__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$on('sendErrors', function (val) {
+      _this.allError = val;
+    });
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/jabatan/Index.vue?vue&type=script&lang=js&":
 /*!*******************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/jabatan/Index.vue?vue&type=script&lang=js& ***!
@@ -9,14 +51,8 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
+/* harmony import */ var _Form_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Form.vue */ "./resources/js/pages/jabatan/Form.vue");
+/* harmony import */ var _eventBus_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./eventBus.js */ "./resources/js/pages/jabatan/eventBus.js");
 //
 //
 //
@@ -64,13 +100,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 var dialog = false;
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'JabatanIndex',
-  components: {},
+  name: 'jabatanIndex',
+  components: {
+    FormLayout: _Form_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
   data: function data() {
     return {
       items: [],
-      allError: [],
       dialog: false,
       formTitle: 'Tambah Data',
       formData: {
@@ -84,66 +123,84 @@ var dialog = false;
     this.getItems();
   },
   methods: {
-    getItems: function getItems() {
+    resetForm: function resetForm(type) {
       var _this = this;
 
+      this.formTitle = type !== null && type !== void 0 ? type : 'Tambah';
+      Object.keys(this.formData).forEach(function (key) {
+        _this.formData[key] = '';
+      });
+      _eventBus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$emit('sendErrors', []);
+    },
+    getItems: function getItems() {
+      var _this2 = this;
+
       axios.get('/api/jabatan').then(function (res) {
-        _this.items = res.data;
+        console.log(res.data);
+        _this2.items = res.data.items;
       })["catch"](function (error) {
-        _this.errorMessage = error.response.data.message;
+        _this2.errorMessage = error.response.data.message;
       });
     },
     addItem: function addItem() {
-      var _this2 = this;
+      var _this3 = this;
 
       if (this.$refs.form.validate()) {
-        var postData = new FormData();
-        postData.append("nama", this.formData.nama);
-        postData.append("deskripsi", this.formData.deskripsi);
-        axios.post('/api/jabatan', postData).then(function (res) {
-          _this2.dialog = false;
+        var formData = new FormData();
+        var item = this.formData;
 
-          _this2.resetForm();
+        for (var key in item = this.formData) {
+          formData.append(key, item[key]);
+        }
 
-          _this2.getItems();
+        axios.post('/api/jabatan', formData).then(function (res) {
+          _this3.dialog = false;
 
-          _this2.$swal({
+          _this3.resetForm();
+
+          _this3.getItems();
+
+          _this3.$swal({
             text: res.data.message,
             icon: res.status === 200 ? 'success' : 'warning',
             timer: 2000,
             showConfirmButton: false
           });
         }, function (error) {
-          _this2.allError = error.response.data.errors;
+          _eventBus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$emit('sendErrors', error.response.data.errors);
         });
       }
     },
     updateItem: function updateItem(id) {
-      var _this3 = this;
+      var _this4 = this;
 
-      var postData = new FormData();
-      postData.append('_method', 'PUT');
-      postData.append("nama", this.formData.nama);
-      postData.append("deskripsi", this.formData.deskripsi);
-      axios.post("/api/jabatan/".concat(id), postData).then(function (res) {
-        _this3.dialog = false;
+      var formData = new FormData();
+      formData.append('_method', 'PUT');
+      var item = this.formData;
 
-        _this3.resetForm();
+      for (var key in item) {
+        formData.append(key, item[key] == 'null' ? null : item[key]);
+      }
 
-        _this3.getItems();
+      axios.post("/api/jabatan/".concat(id), formData).then(function (res) {
+        _this4.dialog = false;
 
-        _this3.$swal({
+        _this4.resetForm();
+
+        _this4.getItems();
+
+        _this4.$swal({
           text: res.data.message,
           icon: res.status === 200 ? 'success' : 'warning',
           timer: 2000,
           showConfirmButton: false
         });
       }, function (error) {
-        _this3.allError = error.response.data.errors;
+        _eventBus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$emit('sendErrors', error.response.data.errors);
       });
     },
     deleteItem: function deleteItem(id) {
-      var _this4 = this;
+      var _this5 = this;
 
       this.$swal({
         title: 'Kamu Yakin?',
@@ -156,16 +213,16 @@ var dialog = false;
       }).then(function (result) {
         if (result.value) {
           axios["delete"]("/api/jabatan/".concat(id)).then(function (res) {
-            _this4.getItems();
+            _this5.getItems();
 
-            _this4.$swal({
+            _this5.$swal({
               text: res.data.message,
               icon: res.status === 200 ? 'success' : 'warning',
               timer: 2000,
               showConfirmButton: false
             });
           })["catch"](function (error) {
-            _this4.allError = error.response.data.errors;
+            _eventBus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$emit('sendErrors', error.response.data.errors);
           });
         }
       });
@@ -176,23 +233,81 @@ var dialog = false;
     },
     edit: function edit(item) {
       this.resetForm('Edit');
-      this.dialog = true;
       this.formTitle = 'Edit';
-      this.formData.id = item.id;
-      this.formData.nama = item.nama;
-      this.formData.deskripsi = item.deskripsi;
-    },
-    resetForm: function resetForm(type) {
-      var _this5 = this;
+      this.dialog = true;
 
-      this.formTitle = type !== null && type !== void 0 ? type : 'Tambah';
-      Object.keys(this.formData).forEach(function (key) {
-        _this5.formData[key] = '';
-      });
-      this.allError = [];
+      for (var key in item) {
+        if (typeof this.formData[key] !== 'undefined') {
+          this.formData[key] = item[key];
+        }
+      }
     }
   }
 });
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/jabatan/Form.vue?vue&type=template&id=e8fb7b9e&":
+/*!**********************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/pages/jabatan/Form.vue?vue&type=template&id=e8fb7b9e& ***!
+  \**********************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-row",
+    [
+      _c(
+        "v-col",
+        { attrs: { cols: "12" } },
+        [
+          _c("v-text-field", {
+            attrs: { label: "Nama*", "error-messages": _vm.allError.nama },
+            model: {
+              value: _vm.formData.nama,
+              callback: function($$v) {
+                _vm.$set(_vm.formData, "nama", $$v)
+              },
+              expression: "formData.nama"
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-col",
+        { attrs: { cols: "12" } },
+        [
+          _c("v-textarea", {
+            attrs: { label: "Deksripsi" },
+            model: {
+              value: _vm.formData.deskripsi,
+              callback: function($$v) {
+                _vm.$set(_vm.formData, "deskripsi", $$v)
+              },
+              expression: "formData.deskripsi"
+            }
+          })
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
 
 /***/ }),
 
@@ -252,54 +367,9 @@ var render = function() {
                           _c(
                             "v-container",
                             [
-                              _c(
-                                "v-row",
-                                [
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          label: "Nama*",
-                                          "error-messages": _vm.allError.nama
-                                        },
-                                        model: {
-                                          value: _vm.formData.nama,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.formData, "nama", $$v)
-                                          },
-                                          expression: "formData.nama"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12" } },
-                                    [
-                                      _c("v-textarea", {
-                                        attrs: { label: "Deksripsi" },
-                                        model: {
-                                          value: _vm.formData.deskripsi,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.formData,
-                                              "deskripsi",
-                                              $$v
-                                            )
-                                          },
-                                          expression: "formData.deskripsi"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
+                              _c("FormLayout", {
+                                attrs: { formData: _vm.formData }
+                              })
                             ],
                             1
                           ),
@@ -384,7 +454,7 @@ var render = function() {
                 _c(
                   "tbody",
                   _vm._l(_vm.items, function(item) {
-                    return _c("tr", { key: item.id }, [
+                    return _c("tr", [
                       _c("td", [_vm._v(_vm._s(item.nama))]),
                       _vm._v(" "),
                       _c(
@@ -435,6 +505,75 @@ var render = function() {
 }
 var staticRenderFns = []
 render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./resources/js/pages/jabatan/Form.vue":
+/*!*********************************************!*\
+  !*** ./resources/js/pages/jabatan/Form.vue ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Form_vue_vue_type_template_id_e8fb7b9e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Form.vue?vue&type=template&id=e8fb7b9e& */ "./resources/js/pages/jabatan/Form.vue?vue&type=template&id=e8fb7b9e&");
+/* harmony import */ var _Form_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Form.vue?vue&type=script&lang=js& */ "./resources/js/pages/jabatan/Form.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Form_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Form_vue_vue_type_template_id_e8fb7b9e___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Form_vue_vue_type_template_id_e8fb7b9e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/pages/jabatan/Form.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/pages/jabatan/Form.vue?vue&type=script&lang=js&":
+/*!**********************************************************************!*\
+  !*** ./resources/js/pages/jabatan/Form.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Form.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/jabatan/Form.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/pages/jabatan/Form.vue?vue&type=template&id=e8fb7b9e&":
+/*!****************************************************************************!*\
+  !*** ./resources/js/pages/jabatan/Form.vue?vue&type=template&id=e8fb7b9e& ***!
+  \****************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_template_id_e8fb7b9e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Form.vue?vue&type=template&id=e8fb7b9e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/pages/jabatan/Form.vue?vue&type=template&id=e8fb7b9e&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_template_id_e8fb7b9e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_template_id_e8fb7b9e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
@@ -506,6 +645,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_4b663835___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
+
+/***/ }),
+
+/***/ "./resources/js/pages/jabatan/eventBus.js":
+/*!************************************************!*\
+  !*** ./resources/js/pages/jabatan/eventBus.js ***!
+  \************************************************/
+/*! exports provided: EventBus */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventBus", function() { return EventBus; });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+
+var EventBus = new vue__WEBPACK_IMPORTED_MODULE_0___default.a();
 
 /***/ })
 

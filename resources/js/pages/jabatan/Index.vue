@@ -8,15 +8,7 @@
                         <v-form ref="form">
                             <v-card-title><span class="text-h5">{{ formTitle }}</span></v-card-title>
                             <v-container>
-                                <v-row>
-                                    <v-col cols="12">
-                                        <v-text-field label="Nama*" v-model="formData.nama" :error-messages="allError.nama">
-                                        </v-text-field>
-                                    </v-col>
-                                    <v-col cols="12">
-                                        <v-textarea label="Deksripsi" v-model="formData.deskripsi"></v-textarea>
-                                    </v-col>
-                                </v-row>
+                                <FormLayout :formData="formData" />
                             </v-container>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
@@ -39,7 +31,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item in items" :key="item.id">
+                    <tr v-for="item in items">
                         <td>{{ item.nama }}</td>
                         <td>
                             <v-btn @click.prevent="edit(item)">Edit</v-btn>
@@ -54,14 +46,17 @@
 
 <script>
 const dialog = false;
+import FormLayout from './Form.vue'
+import { EventBus } from './eventBus.js'
 
 export default {
-    name: 'JabatanIndex',
+    name: 'jabatanIndex',
     components: {
+        FormLayout
     },
     data() {
         return {
-            items: [], allError: [],
+            items: [],
             dialog: false,
             formTitle: 'Tambah Data',
             formData: {
@@ -75,39 +70,49 @@ export default {
         this.getItems();
     },
     methods: {
+        resetForm(type) {
+            this.formTitle = type ?? 'Tambah';
+            Object.keys(this.formData).forEach((key) => {
+                this.formData[key] = '';
+            });
+            EventBus.$emit('sendErrors', []);
+        },
         getItems() {
             axios.get('/api/jabatan').then(res => {
-                this.items = res.data
+                console.log(res.data);
+                this.items = res.data.items;
             }).catch((error) => {
                 this.errorMessage = error.response.data.message;
             })
         },
         addItem() {
             if (this.$refs.form.validate()) {
-                let postData = new FormData();
-                postData.append("nama", this.formData.nama);
-                postData.append("deskripsi", this.formData.deskripsi);
+                let formData = new FormData();
+                let item = this.formData;
+                for (var key in item = this.formData) {
+                    formData.append(key, item[key]);
+                }
 
-                axios.post('/api/jabatan', postData).then(res => {
+                axios.post('/api/jabatan', formData).then(res => {
                     this.dialog = false; this.resetForm(); this.getItems();
                     this.$swal({
                         text: res.data.message, icon: res.status === 200 ? 'success' : 'warning',
                         timer: 2000, showConfirmButton: false
                     })
                 }, (error) => {
-                    this.allError = error.response.data.errors;
+                    EventBus.$emit('sendErrors', error.response.data.errors);
                 });
-
             }
-
         },
         updateItem(id) {
-            let postData = new FormData();
-            postData.append('_method', 'PUT');
-            postData.append("nama", this.formData.nama);
-            postData.append("deskripsi", this.formData.deskripsi);
+            let formData = new FormData();
+            formData.append('_method', 'PUT');
+            let item = this.formData;
+            for (var key in item) {
+                formData.append(key, item[key] == 'null' ? null : item[key]);
+            }
 
-            axios.post(`/api/jabatan/${id}`, postData).then(res => {
+            axios.post(`/api/jabatan/${id}`, formData).then(res => {
                 this.dialog = false;
                 this.resetForm(); this.getItems();
 
@@ -117,7 +122,7 @@ export default {
                 })
 
             }, (error) => {
-                this.allError = error.response.data.errors;
+                EventBus.$emit('sendErrors', error.response.data.errors);
             });
         },
         deleteItem(id) {
@@ -134,7 +139,7 @@ export default {
                             timer: 2000, showConfirmButton: false
                         })
                     }).catch((error) => {
-                        this.allError = error.response.data.errors;
+                        EventBus.$emit('sendErrors', error.response.data.errors);
                     })
                 }
             })
@@ -144,19 +149,13 @@ export default {
             this.resetForm('Tambah');
         },
         edit(item) {
-            this.resetForm('Edit');
+            this.resetForm('Edit'); this.formTitle = 'Edit';
             this.dialog = true;
-            this.formTitle = 'Edit';
-            this.formData.id = item.id;
-            this.formData.nama = item.nama;
-            this.formData.deskripsi = item.deskripsi;
-        },
-        resetForm(type) {
-            this.formTitle = type ?? 'Tambah';
-            Object.keys(this.formData).forEach((key) => {
-                this.formData[key] = '';
-            });
-            this.allError = [];
+            for (var key in item) {
+                if (typeof this.formData[key] !== 'undefined') {
+                    this.formData[key] = item[key];
+                }
+            }
         },
     }
 }
