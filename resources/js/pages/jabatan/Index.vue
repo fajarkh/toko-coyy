@@ -139,7 +139,7 @@ export default {
                             timer: 2000, showConfirmButton: false
                         })
                     }).catch((error) => {
-                        EventBus.$emit('sendErrors', error.response.data.errors);
+                        this.$swal({ html: error.response.data.message, icon: 'warning' });
                     })
                 }
             })

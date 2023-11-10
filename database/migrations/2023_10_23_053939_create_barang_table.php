@@ -18,7 +18,8 @@ class CreateBarangTable extends Migration
             $table->string('sku')->nullable();
             $table->string('nama')->nullable();
             $table->string('merek')->nullable();
-            $table->string('kategori')->nullable();
+            $table->unsignedBigInteger("kategori_id")->nullable();
+            $table->foreign("kategori_id")->references("id")->on("kategori")->onUpdate('cascade')->onDelete('cascade');
             $table->string('satuan')->nullable();
             $table->string('deskripsi')->nullable();
             $table->timestamps();

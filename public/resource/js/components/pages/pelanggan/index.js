@@ -69,8 +69,15 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this2 = this;
 
-    _EventBus_js__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$on('sendErrors', function (val) {
-      _this2.allError = val;
+    _EventBus_js__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$on('sendErrors', function (error) {
+      if (error.status === 422) {
+        _this2.allError = error.data.errors;
+      } else {
+        _this2.$swal({
+          text: error.data.message,
+          icon: 'warning'
+        });
+      }
     });
   }
 });
@@ -198,7 +205,7 @@ var dialog = false;
             showConfirmButton: false
           });
         }, function (error) {
-          _EventBus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$emit('sendErrors', error.response.data.errors);
+          _EventBus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$emit('sendErrors', error.response);
         });
       }
     },
@@ -253,7 +260,10 @@ var dialog = false;
               showConfirmButton: false
             });
           })["catch"](function (error) {
-            _EventBus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$emit('sendErrors', error.response.data.errors);
+            _this5.$swal({
+              html: error.response.data.message,
+              icon: 'warning'
+            });
           });
         }
       });

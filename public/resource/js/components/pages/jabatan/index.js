@@ -222,7 +222,10 @@ var dialog = false;
               showConfirmButton: false
             });
           })["catch"](function (error) {
-            _EventBus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$emit('sendErrors', error.response.data.errors);
+            _this5.$swal({
+              html: error.response.data.message,
+              icon: 'warning'
+            });
           });
         }
       });

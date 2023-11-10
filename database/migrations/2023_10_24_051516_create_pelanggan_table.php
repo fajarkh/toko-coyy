@@ -20,7 +20,7 @@ class CreatePelangganTable extends Migration
             $table->string('no_hp')->nullable();
             $table->string('jk')->nullable();
             $table->unsignedBigInteger("jabatan_id")->nullable();
-            $table->foreign("jabatan_id")->references("id")->on("jabatan");
+            $table->foreign("jabatan_id")->references("id")->on("jabatan")->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

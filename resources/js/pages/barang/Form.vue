@@ -9,8 +9,8 @@
             </v-text-field>
         </v-col>
         <v-col cols="12">
-            <v-text-field label="Kategori*" v-model="formData.kategori">
-            </v-text-field>
+            <v-select label="Kategori*" v-model="formData.kategori_id" :items="kategoriItems" item-text="state"
+                item-value="abbr" persistent-hint :error-messages="allError.kategori_id" placeholder="Pilih"></v-select>
         </v-col>
         <v-col cols="12">
             <v-text-field label="Satuan*" v-model="formData.satuan">
@@ -26,8 +26,18 @@ export default {
     props: ['formData'],
     data() {
         return {
-            allError: [],
+            allError: [], kategoriItems: [],
         }
+    },
+    methods: {
+        populateKategoriSelect() {
+            axios.get('/api/select-ajax/kategori').then(res => {
+                this.kategoriItems = res.data;
+            }).catch((error) => { this.errorMessage = error.response.data.message; });
+        },
+    },
+    mounted() {
+        this.populateKategoriSelect();
     },
     created() {
         EventBus.$on('sendErrors', (val) => { this.allError = val });

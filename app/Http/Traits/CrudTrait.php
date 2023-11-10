@@ -115,7 +115,7 @@ trait CrudTrait
 			return response()->json(['message' => 'Data Berhasil Dihapus!!']);
 		} catch (\Throwable $e) {
 			DB::rollback();
-			return $e;
+			throw $e;
 		}
 	}
 }

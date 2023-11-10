@@ -49,7 +49,13 @@ export default {
         this.populateJabatanSelect();
     },
     created() {
-        EventBus.$on('sendErrors', (val) => { this.allError = val });
+        EventBus.$on('sendErrors', (error) => {
+            if (error.status === 422) {
+                this.allError = error.data.errors;
+            } else {
+                this.$swal({ text: error.data.message, icon: 'warning' });
+            }
+        });
     }
 }
 </script>

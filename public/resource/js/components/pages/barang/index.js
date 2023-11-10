@@ -37,14 +37,29 @@ __webpack_require__.r(__webpack_exports__);
   props: ['formData'],
   data: function data() {
     return {
-      allError: []
+      allError: [],
+      kategoriItems: []
     };
   },
+  methods: {
+    populateKategoriSelect: function populateKategoriSelect() {
+      var _this = this;
+
+      axios.get('/api/select-ajax/kategori').then(function (res) {
+        _this.kategoriItems = res.data;
+      })["catch"](function (error) {
+        _this.errorMessage = error.response.data.message;
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.populateKategoriSelect();
+  },
   created: function created() {
-    var _this = this;
+    var _this2 = this;
 
     _EventBus_js__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$on('sendErrors', function (val) {
-      _this.allError = val;
+      _this2.allError = val;
     });
   }
 });
@@ -129,13 +144,7 @@ var dialog = false;
       items: [],
       dialog: false,
       formTitle: 'Tambah Data',
-      formData: {
-        id: '',
-        nama: '',
-        merek: '',
-        kategori: '',
-        satuan: ''
-      }
+      formData: _EventBus_js__WEBPACK_IMPORTED_MODULE_1__["formData"]
     };
   },
   mounted: function mounted() {
@@ -155,7 +164,6 @@ var dialog = false;
       var _this2 = this;
 
       axios.get('/api/barang').then(function (res) {
-        console.log(res.data);
         _this2.items = res.data.items;
       })["catch"](function (error) {
         _this2.errorMessage = error.response.data.message;
@@ -165,14 +173,15 @@ var dialog = false;
       var _this3 = this;
 
       if (this.$refs.form.validate()) {
-        var formData = new FormData();
+        var _formData = new FormData();
+
         var item = this.formData;
 
         for (var key in item = this.formData) {
-          formData.append(key, item[key]);
+          _formData.append(key, item[key]);
         }
 
-        axios.post('/api/barang', formData).then(function (res) {
+        axios.post('/api/barang', _formData).then(function (res) {
           _this3.dialog = false;
 
           _this3.resetForm();
@@ -241,7 +250,10 @@ var dialog = false;
               showConfirmButton: false
             });
           })["catch"](function (error) {
-            _EventBus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$emit('sendErrors', error.response.data.errors);
+            _this5.$swal({
+              html: error.response.data.message,
+              icon: 'warning'
+            });
           });
         }
       });
@@ -324,14 +336,22 @@ var render = function() {
         "v-col",
         { attrs: { cols: "12" } },
         [
-          _c("v-text-field", {
-            attrs: { label: "Kategori*" },
+          _c("v-select", {
+            attrs: {
+              label: "Kategori*",
+              items: _vm.kategoriItems,
+              "item-text": "state",
+              "item-value": "abbr",
+              "persistent-hint": "",
+              "error-messages": _vm.allError.kategori_id,
+              placeholder: "Pilih"
+            },
             model: {
-              value: _vm.formData.kategori,
+              value: _vm.formData.kategori_id,
               callback: function($$v) {
-                _vm.$set(_vm.formData, "kategori", $$v)
+                _vm.$set(_vm.formData, "kategori_id", $$v)
               },
-              expression: "formData.kategori"
+              expression: "formData.kategori_id"
             }
           })
         ],
@@ -589,16 +609,24 @@ render._withStripped = true
 /*!***********************************************!*\
   !*** ./resources/js/pages/barang/EventBus.js ***!
   \***********************************************/
-/*! exports provided: EventBus */
+/*! exports provided: EventBus, formData */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventBus", function() { return EventBus; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "formData", function() { return formData; });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 
 var EventBus = new vue__WEBPACK_IMPORTED_MODULE_0___default.a();
+var formData = {
+  id: '',
+  nama: '',
+  merek: '',
+  kategori_id: null,
+  satuan: ''
+};
 
 /***/ }),
 

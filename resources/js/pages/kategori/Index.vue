@@ -81,7 +81,6 @@ export default {
         },
         getItems() {
             axios.get('/api/kategori').then(res => {
-                console.log(res.data);
                 this.items = res.data.items;
             }).catch((error) => {
                 this.errorMessage = error.response.data.message;
@@ -102,7 +101,7 @@ export default {
                         timer: 2000, showConfirmButton: false
                     })
                 }, (error) => {
-                    EventBus.$emit('sendErrors', error.response.data.errors);
+                    EventBus.$emit('sendErrors', error.response);
                 });
             }
         },
@@ -141,7 +140,7 @@ export default {
                             timer: 2000, showConfirmButton: false
                         })
                     }).catch((error) => {
-                        EventBus.$emit('sendErrors', error.response.data.errors);
+                        this.$swal({ html: error.response.data.message, icon: 'warning' });
                     })
                 }
             })

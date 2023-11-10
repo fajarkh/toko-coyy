@@ -35,8 +35,15 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this = this;
 
-    _EventBus_js__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$on('sendErrors', function (val) {
-      _this.allError = val;
+    _EventBus_js__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$on('sendErrors', function (error) {
+      if (error.status === 422) {
+        _this.allError = error.data.errors;
+      } else {
+        _this.$swal({
+          text: error.data.message,
+          icon: 'warning'
+        });
+      }
     });
   }
 });
@@ -139,7 +146,6 @@ var dialog = false;
       var _this2 = this;
 
       axios.get('/api/kategori').then(function (res) {
-        console.log(res.data);
         _this2.items = res.data.items;
       })["catch"](function (error) {
         _this2.errorMessage = error.response.data.message;
@@ -170,7 +176,7 @@ var dialog = false;
             showConfirmButton: false
           });
         }, function (error) {
-          _EventBus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$emit('sendErrors', error.response.data.errors);
+          _EventBus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$emit('sendErrors', error.response);
         });
       }
     },
@@ -225,7 +231,10 @@ var dialog = false;
               showConfirmButton: false
             });
           })["catch"](function (error) {
-            _EventBus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$emit('sendErrors', error.response.data.errors);
+            _this5.$swal({
+              html: error.response.data.message,
+              icon: 'warning'
+            });
           });
         }
       });
