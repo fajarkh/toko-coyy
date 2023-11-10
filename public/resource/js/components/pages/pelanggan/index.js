@@ -9,7 +9,11 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _eventBus_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./eventBus.js */ "./resources/js/pages/pelanggan/eventBus.js");
+/* harmony import */ var _EventBus_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EventBus.js */ "./resources/js/pages/pelanggan/EventBus.js");
+//
+//
+//
+//
 //
 //
 //
@@ -44,14 +48,29 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         state: 'Perempuan',
         abbr: 'P'
-      }]
+      }],
+      jabatanItems: []
     };
   },
-  created: function created() {
-    var _this = this;
+  methods: {
+    populateJabatanSelect: function populateJabatanSelect() {
+      var _this = this;
 
-    _eventBus_js__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$on('sendErrors', function (val) {
-      _this.allError = val;
+      axios.get('/api/select-ajax/jabatan').then(function (res) {
+        _this.jabatanItems = res.data;
+      })["catch"](function (error) {
+        _this.errorMessage = error.response.data.message;
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.populateJabatanSelect();
+  },
+  created: function created() {
+    var _this2 = this;
+
+    _EventBus_js__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$on('sendErrors', function (val) {
+      _this2.allError = val;
     });
   }
 });
@@ -68,7 +87,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Form_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Form.vue */ "./resources/js/pages/pelanggan/Form.vue");
-/* harmony import */ var _eventBus_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./eventBus.js */ "./resources/js/pages/pelanggan/eventBus.js");
+/* harmony import */ var _EventBus_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EventBus.js */ "./resources/js/pages/pelanggan/EventBus.js");
 //
 //
 //
@@ -128,13 +147,7 @@ var dialog = false;
       items: [],
       dialog: false,
       formTitle: 'Tambah Data',
-      formData: {
-        id: '',
-        nama: '',
-        jk: null,
-        affling: null,
-        no_hp: null
-      }
+      formData: _EventBus_js__WEBPACK_IMPORTED_MODULE_1__["formData"]
     };
   },
   mounted: function mounted() {
@@ -148,13 +161,12 @@ var dialog = false;
       Object.keys(this.formData).forEach(function (key) {
         _this.formData[key] = '';
       });
-      _eventBus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$emit('sendErrors', []);
+      _EventBus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$emit('sendErrors', []);
     },
     getItems: function getItems() {
       var _this2 = this;
 
       axios.get('/api/pelanggan').then(function (res) {
-        console.log(res.data);
         _this2.items = res.data.items;
       })["catch"](function (error) {
         _this2.errorMessage = error.response.data.message;
@@ -164,14 +176,15 @@ var dialog = false;
       var _this3 = this;
 
       if (this.$refs.form.validate()) {
-        var formData = new FormData();
+        var _formData = new FormData();
+
         var item = this.formData;
 
         for (var key in item = this.formData) {
-          formData.append(key, item[key]);
+          _formData.append(key, item[key]);
         }
 
-        axios.post('/api/pelanggan', formData).then(function (res) {
+        axios.post('/api/pelanggan', _formData).then(function (res) {
           _this3.dialog = false;
 
           _this3.resetForm();
@@ -185,7 +198,7 @@ var dialog = false;
             showConfirmButton: false
           });
         }, function (error) {
-          _eventBus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$emit('sendErrors', error.response.data.errors);
+          _EventBus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$emit('sendErrors', error.response.data.errors);
         });
       }
     },
@@ -214,7 +227,7 @@ var dialog = false;
           showConfirmButton: false
         });
       }, function (error) {
-        _eventBus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$emit('sendErrors', error.response.data.errors);
+        _EventBus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$emit('sendErrors', error.response.data.errors);
       });
     },
     deleteItem: function deleteItem(id) {
@@ -240,7 +253,7 @@ var dialog = false;
               showConfirmButton: false
             });
           })["catch"](function (error) {
-            _eventBus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$emit('sendErrors', error.response.data.errors);
+            _EventBus_js__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$emit('sendErrors', error.response.data.errors);
           });
         }
       });
@@ -360,6 +373,32 @@ var render = function() {
                 _vm.$set(_vm.formData, "jk", $$v)
               },
               expression: "formData.jk"
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-col",
+        { attrs: { cols: "12" } },
+        [
+          _c("v-select", {
+            attrs: {
+              label: "Jabatan*",
+              items: _vm.jabatanItems,
+              "item-text": "state",
+              "item-value": "abbr",
+              "persistent-hint": "",
+              "error-messages": _vm.allError.jabatan_id,
+              placeholder: "Pilih"
+            },
+            model: {
+              value: _vm.formData.jabatan_id,
+              callback: function($$v) {
+                _vm.$set(_vm.formData, "jabatan_id", $$v)
+              },
+              expression: "formData.jabatan_id"
             }
           })
         ],
@@ -575,6 +614,32 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./resources/js/pages/pelanggan/EventBus.js":
+/*!**************************************************!*\
+  !*** ./resources/js/pages/pelanggan/EventBus.js ***!
+  \**************************************************/
+/*! exports provided: EventBus, formData */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventBus", function() { return EventBus; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "formData", function() { return formData; });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+
+var EventBus = new vue__WEBPACK_IMPORTED_MODULE_0___default.a();
+var formData = {
+  id: '',
+  nama: '',
+  jk: null,
+  affling: null,
+  no_hp: null,
+  jabatan_id: null
+};
+
+/***/ }),
+
 /***/ "./resources/js/pages/pelanggan/Form.vue":
 /*!***********************************************!*\
   !*** ./resources/js/pages/pelanggan/Form.vue ***!
@@ -710,23 +775,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_3156514a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
-
-/***/ }),
-
-/***/ "./resources/js/pages/pelanggan/eventBus.js":
-/*!**************************************************!*\
-  !*** ./resources/js/pages/pelanggan/eventBus.js ***!
-  \**************************************************/
-/*! exports provided: EventBus */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventBus", function() { return EventBus; });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
-
-var EventBus = new vue__WEBPACK_IMPORTED_MODULE_0___default.a();
 
 /***/ })
 

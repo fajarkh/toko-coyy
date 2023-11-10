@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { EventBus } from './eventBus.js'
+import { EventBus } from './EventBus.js'
 export default {
     name: 'JabatanForm',
     props: ['formData'],

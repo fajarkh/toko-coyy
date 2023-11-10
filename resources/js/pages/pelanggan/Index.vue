@@ -47,7 +47,7 @@
 <script>
 const dialog = false;
 import FormLayout from './Form.vue'
-import { EventBus } from './eventBus.js'
+import { EventBus, formData } from './EventBus.js'
 
 export default {
     name: 'PelangganIndex',
@@ -59,13 +59,7 @@ export default {
             items: [],
             dialog: false,
             formTitle: 'Tambah Data',
-            formData: {
-                id: '',
-                nama: '',
-                jk: null,
-                affling: null,
-                no_hp: null,
-            },
+            formData: formData,
         }
     },
     mounted() {
@@ -81,7 +75,6 @@ export default {
         },
         getItems() {
             axios.get('/api/pelanggan').then(res => {
-                console.log(res.data);
                 this.items = res.data.items;
             }).catch((error) => {
                 this.errorMessage = error.response.data.message;

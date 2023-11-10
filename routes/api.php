@@ -18,6 +18,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::prefix('select-ajax')->group(function () {
+    Route::get('jabatan', 'JabatanController@selectAjax');
+});
+
 Route::resource('barang', 'BarangController');
 Route::resource('kategori', 'KategoriController');
 Route::resource('jabatan', 'JabatanController');
