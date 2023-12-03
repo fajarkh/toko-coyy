@@ -13,6 +13,9 @@ import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 Vue.use(VueSweetalert2);
 
+import BaseDatePicker from './components/base/DatePicker.vue';
+Vue.component('base-date-picker', BaseDatePicker)
+
 import App from './components/App.vue'
 
 const app = new Vue({

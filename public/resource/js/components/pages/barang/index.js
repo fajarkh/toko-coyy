@@ -60,6 +60,7 @@ __webpack_require__.r(__webpack_exports__);
 
     _EventBus_js__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$on('sendErrors', function (val) {
       _this2.allError = val;
+      console.log(_this2.allError);
     });
   }
 });
@@ -301,7 +302,7 @@ var render = function() {
         { attrs: { cols: "12" } },
         [
           _c("v-text-field", {
-            attrs: { label: "Nama*" },
+            attrs: { label: "Nama*", "error-messages": _vm.allError.nama },
             model: {
               value: _vm.formData.nama,
               callback: function($$v) {
@@ -319,7 +320,7 @@ var render = function() {
         { attrs: { cols: "12" } },
         [
           _c("v-text-field", {
-            attrs: { label: "Merek*" },
+            attrs: { label: "Merek", "error-messages": _vm.allError.merek },
             model: {
               value: _vm.formData.merek,
               callback: function($$v) {

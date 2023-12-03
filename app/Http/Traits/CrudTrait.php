@@ -38,11 +38,14 @@ trait CrudTrait
 
 			$data  = $this->getRequest();
 			$model = $this->model->fill($data);
-			$model->save();
 
 			if (method_exists($this, 'customStore')) {
-				$this->customStore($data, $model);
+				$custom = $this->customStore($data, $model);
+				$data  = isset($custom['data']) ? $custom['data'] : $this->getRequest();
+				$model = isset($custom['model']) ? $custom['model']->fill($data) : $this->model->fill($data);
 			}
+
+			$model->save();
 
 			DB::commit();
 			return response()->json(['message' => 'Data Berhasil Ditambah!!', 'item' => $model], 200);
@@ -79,11 +82,14 @@ trait CrudTrait
 			$data  = $this->getRequest();
 			$model = $this->model->findOrFail($id);
 			$model->fill($data);
-			$model->save();
 
 			if (method_exists($this, 'customUpdate')) {
-				$this->customUpdate($data, $model);
+				$custom = $this->customUpdate($data, $model);
+				$data  = isset($custom['data']) ? $custom['data'] : $this->getRequest();
+				$model = isset($custom['model']) ? $custom['model']->fill($data) : $this->model->fill($data);
 			}
+
+			$model->save();
 
 			DB::commit();
 			return response()->json(['message' => 'Data Berhasil Diubah!!', 'item' => $model]);

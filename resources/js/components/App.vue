@@ -12,20 +12,19 @@
 
         <app-footer></app-footer>
     </v-app>
-
 </template>
 
 <script>
-    import Navbar from './Navbar'
-    import Header from './Header'
-    import Footer from './Footer'
+import Navbar from './Navbar'
+import Header from './Header'
+import Footer from './Footer'
 
-    export default {
-        name: 'App',
-        components: {
-            'navbar': Navbar,
-            'app-header': Header,
-            'app-footer': Footer
-        }
+export default {
+    name: 'App',
+    components: {
+        'navbar': Navbar,
+        'app-header': Header,
+        'app-footer': Footer,
     }
+}
 </script>

@@ -15,6 +15,7 @@ class CreateBatchTable extends Migration
     {
         Schema::create('batch', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_batch')->nullable();
             $table->unsignedBigInteger('barang_id')->nullable();
             $table->foreign('barang_id')->references('id')->on('barang')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('jumlah_pesanan')->nullable();

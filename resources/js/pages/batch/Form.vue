@@ -1,24 +1,35 @@
 <template>
     <v-row>
-        <v-col cols="12">
-            <v-text-field label="Nama*" v-model="formData.nama" :error-messages="allError.nama">
+        <v-col cols="6">
+            <v-select label="Barang*" v-model="formData.barang_id" :items="barangItems" item-text="state" item-value="abbr"
+                persistent-hint :error-messages="allError.barang_id" placeholder="Pilih"></v-select>
+        </v-col>
+        <v-col cols="6">
+            <v-text-field label="Kode Batch*" v-model="formData.kode_batch" :error-messages="allError.kode_batch">
+            </v-text-field>
+        </v-col>
+        <v-col cols="6">
+            <v-text-field label="Jumlah Pesanan*" v-model="formData.jumlah_pesanan"
+                :error-messages="allError.jumlah_pesanan" type="number">
+            </v-text-field>
+        </v-col>
+        <v-col cols="6">
+            <v-text-field label="Jumlah Masuk*" v-model="formData.jumlah_masuk" :error-messages="allError.jumlah_masuk"
+                type="number">
+            </v-text-field>
+        </v-col>
+        <v-col cols="6">
+            <v-text-field label="Harga Satuan*" v-model="formData.harga_satuan" :error-messages="allError.harga_satuan"
+                type="number">
+            </v-text-field>
+        </v-col>
+        <v-col cols="6">
+            <v-text-field label="Harga Jual*" v-model="formData.harga_jual" :error-messages="allError.harga_jual"
+                type="number">
             </v-text-field>
         </v-col>
         <v-col cols="12">
-            <v-text-field label="Affling*" v-model="formData.affling" :error-messages="allError.affling">
-            </v-text-field>
-        </v-col>
-        <v-col cols="12">
-            <v-text-field label="No Hp*" v-model="formData.no_hp" :error-messages="allError.no_hp">
-            </v-text-field>
-        </v-col>
-        <v-col cols="12">
-            <v-select label="Jenis Kelamin*" v-model="formData.jk" :items="jkItems" item-text="state" item-value="abbr"
-                persistent-hint :error-messages="allError.jk" placeholder="Pilih"></v-select>
-        </v-col>
-        <v-col cols="12">
-            <v-select label="Jabatan*" v-model="formData.jabatan_id" :items="jabatanItems" item-text="state"
-                item-value="abbr" persistent-hint :error-messages="allError.jabatan_id" placeholder="Pilih"></v-select>
+            <base-date-picker label="Tanggal Kadaluarsa*" v-model="formData.exp_date" error-messages="allError.exp_date" />
         </v-col>
     </v-row>
 </template>
@@ -26,34 +37,32 @@
 <script>
 import { EventBus } from './EventBus.js'
 export default {
-    name: 'PelangganForm',
+    name: 'BatchForm',
     props: ['formData'],
     data() {
         return {
             allError: [],
-            jkItems: [
-                { state: 'Laki-laki', abbr: 'L' },
-                { state: 'Perempuan', abbr: 'P' },
-            ],
-            jabatanItems: [],
+            barangItems: [],
         }
     },
     methods: {
-        populateJabatanSelect() {
-            axios.get('/api/select-ajax/jabatan').then(res => {
-                this.jabatanItems = res.data;
+        populateBarangSelect() {
+            axios.get('/api/select-ajax/barang').then(res => {
+                this.barangItems = res.data;
             }).catch((error) => { this.errorMessage = error.response.data.message; });
         },
     },
     mounted() {
-        this.populateJabatanSelect();
+        this.populateBarangSelect();
     },
     created() {
         EventBus.$on('sendErrors', (error) => {
             if (error.status === 422) {
                 this.allError = error.data.errors;
             } else {
-                this.$swal({ text: error.data.message, icon: 'warning' });
+                if (error.length) {
+                    this.$swal({ text: error.data.message, icon: 'warning' });
+                }
             }
         });
     }

@@ -25,6 +25,8 @@ class BarangRequest extends FormRequest
     {
         return [
             'nama' => 'required',
+            'kategori_id' => 'required',
+            'satuan' => 'required',
         ];
     }
 }

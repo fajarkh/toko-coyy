@@ -24,7 +24,13 @@ class BatchRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'nama' => 'required',
+            'barang_id' => 'required',
+            'kode_batch' => 'required',
+            'jumlah_pesanan' => 'required',
+            'jumlah_masuk' => 'required',
+            'exp_date' => 'required',
+            'harga_satuan' => 'required',
+            'harga_jual' => 'required',
         ];
     }
 }

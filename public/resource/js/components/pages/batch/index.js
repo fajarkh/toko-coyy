@@ -35,36 +35,40 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'PelangganForm',
+  name: 'BatchForm',
   props: ['formData'],
   data: function data() {
     return {
       allError: [],
-      jkItems: [{
-        state: 'Laki-laki',
-        abbr: 'L'
-      }, {
-        state: 'Perempuan',
-        abbr: 'P'
-      }],
-      jabatanItems: []
+      barangItems: []
     };
   },
   methods: {
-    populateJabatanSelect: function populateJabatanSelect() {
+    populateBarangSelect: function populateBarangSelect() {
       var _this = this;
 
-      axios.get('/api/select-ajax/jabatan').then(function (res) {
-        _this.jabatanItems = res.data;
+      axios.get('/api/select-ajax/barang').then(function (res) {
+        _this.barangItems = res.data;
       })["catch"](function (error) {
         _this.errorMessage = error.response.data.message;
       });
     }
   },
   mounted: function mounted() {
-    this.populateJabatanSelect();
+    this.populateBarangSelect();
   },
   created: function created() {
     var _this2 = this;
@@ -73,10 +77,12 @@ __webpack_require__.r(__webpack_exports__);
       if (error.status === 422) {
         _this2.allError = error.data.errors;
       } else {
-        _this2.$swal({
-          text: error.data.message,
-          icon: 'warning'
-        });
+        if (error.length) {
+          _this2.$swal({
+            text: error.data.message,
+            icon: 'warning'
+          });
+        }
       }
     });
   }
@@ -95,6 +101,12 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Form_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Form.vue */ "./resources/js/pages/batch/Form.vue");
 /* harmony import */ var _EventBus_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EventBus.js */ "./resources/js/pages/batch/EventBus.js");
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -308,81 +320,133 @@ var render = function() {
     [
       _c(
         "v-col",
-        { attrs: { cols: "12" } },
-        [
-          _c("v-text-field", {
-            attrs: { label: "Nama*", "error-messages": _vm.allError.nama },
-            model: {
-              value: _vm.formData.nama,
-              callback: function($$v) {
-                _vm.$set(_vm.formData, "nama", $$v)
-              },
-              expression: "formData.nama"
-            }
-          })
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-col",
-        { attrs: { cols: "12" } },
-        [
-          _c("v-text-field", {
-            attrs: {
-              label: "Affling*",
-              "error-messages": _vm.allError.affling
-            },
-            model: {
-              value: _vm.formData.affling,
-              callback: function($$v) {
-                _vm.$set(_vm.formData, "affling", $$v)
-              },
-              expression: "formData.affling"
-            }
-          })
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-col",
-        { attrs: { cols: "12" } },
-        [
-          _c("v-text-field", {
-            attrs: { label: "No Hp*", "error-messages": _vm.allError.no_hp },
-            model: {
-              value: _vm.formData.no_hp,
-              callback: function($$v) {
-                _vm.$set(_vm.formData, "no_hp", $$v)
-              },
-              expression: "formData.no_hp"
-            }
-          })
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-col",
-        { attrs: { cols: "12" } },
+        { attrs: { cols: "6" } },
         [
           _c("v-select", {
             attrs: {
-              label: "Jenis Kelamin*",
-              items: _vm.jkItems,
+              label: "Barang*",
+              items: _vm.barangItems,
               "item-text": "state",
               "item-value": "abbr",
               "persistent-hint": "",
-              "error-messages": _vm.allError.jk,
+              "error-messages": _vm.allError.barang_id,
               placeholder: "Pilih"
             },
             model: {
-              value: _vm.formData.jk,
+              value: _vm.formData.barang_id,
               callback: function($$v) {
-                _vm.$set(_vm.formData, "jk", $$v)
+                _vm.$set(_vm.formData, "barang_id", $$v)
               },
-              expression: "formData.jk"
+              expression: "formData.barang_id"
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-col",
+        { attrs: { cols: "6" } },
+        [
+          _c("v-text-field", {
+            attrs: {
+              label: "Kode Batch*",
+              "error-messages": _vm.allError.kode_batch
+            },
+            model: {
+              value: _vm.formData.kode_batch,
+              callback: function($$v) {
+                _vm.$set(_vm.formData, "kode_batch", $$v)
+              },
+              expression: "formData.kode_batch"
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-col",
+        { attrs: { cols: "6" } },
+        [
+          _c("v-text-field", {
+            attrs: {
+              label: "Jumlah Pesanan*",
+              "error-messages": _vm.allError.jumlah_pesanan,
+              type: "number"
+            },
+            model: {
+              value: _vm.formData.jumlah_pesanan,
+              callback: function($$v) {
+                _vm.$set(_vm.formData, "jumlah_pesanan", $$v)
+              },
+              expression: "formData.jumlah_pesanan"
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-col",
+        { attrs: { cols: "6" } },
+        [
+          _c("v-text-field", {
+            attrs: {
+              label: "Jumlah Masuk*",
+              "error-messages": _vm.allError.jumlah_masuk,
+              type: "number"
+            },
+            model: {
+              value: _vm.formData.jumlah_masuk,
+              callback: function($$v) {
+                _vm.$set(_vm.formData, "jumlah_masuk", $$v)
+              },
+              expression: "formData.jumlah_masuk"
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-col",
+        { attrs: { cols: "6" } },
+        [
+          _c("v-text-field", {
+            attrs: {
+              label: "Harga Satuan*",
+              "error-messages": _vm.allError.harga_satuan,
+              type: "number"
+            },
+            model: {
+              value: _vm.formData.harga_satuan,
+              callback: function($$v) {
+                _vm.$set(_vm.formData, "harga_satuan", $$v)
+              },
+              expression: "formData.harga_satuan"
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-col",
+        { attrs: { cols: "6" } },
+        [
+          _c("v-text-field", {
+            attrs: {
+              label: "Harga Jual*",
+              "error-messages": _vm.allError.harga_jual,
+              type: "number"
+            },
+            model: {
+              value: _vm.formData.harga_jual,
+              callback: function($$v) {
+                _vm.$set(_vm.formData, "harga_jual", $$v)
+              },
+              expression: "formData.harga_jual"
             }
           })
         ],
@@ -393,22 +457,17 @@ var render = function() {
         "v-col",
         { attrs: { cols: "12" } },
         [
-          _c("v-select", {
+          _c("base-date-picker", {
             attrs: {
-              label: "Jabatan*",
-              items: _vm.jabatanItems,
-              "item-text": "state",
-              "item-value": "abbr",
-              "persistent-hint": "",
-              "error-messages": _vm.allError.jabatan_id,
-              placeholder: "Pilih"
+              label: "Tanggal Kadaluarsa*",
+              "error-messages": "allError.exp_date"
             },
             model: {
-              value: _vm.formData.jabatan_id,
+              value: _vm.formData.exp_date,
               callback: function($$v) {
-                _vm.$set(_vm.formData, "jabatan_id", $$v)
+                _vm.$set(_vm.formData, "exp_date", $$v)
               },
-              expression: "formData.jabatan_id"
+              expression: "formData.exp_date"
             }
           })
         ],
@@ -559,7 +618,21 @@ var render = function() {
               return [
                 _c("thead", [
                   _c("tr", [
-                    _c("th", { staticClass: "text-left" }, [_vm._v("Nama")]),
+                    _c("th", { staticClass: "text-left" }, [
+                      _vm._v("Nama Barang")
+                    ]),
+                    _vm._v(" "),
+                    _c("th", { staticClass: "text-left" }, [
+                      _vm._v("Kode Batch")
+                    ]),
+                    _vm._v(" "),
+                    _c("th", { staticClass: "text-left" }, [
+                      _vm._v("Sisa Stok")
+                    ]),
+                    _vm._v(" "),
+                    _c("th", { staticClass: "text-left" }, [
+                      _vm._v("Tanggal Kadaluarsa")
+                    ]),
                     _vm._v(" "),
                     _c("th", { staticClass: "text-left" }, [_vm._v("Aksi")])
                   ])
@@ -569,7 +642,13 @@ var render = function() {
                   "tbody",
                   _vm._l(_vm.items, function(item) {
                     return _c("tr", [
-                      _c("td", [_vm._v(_vm._s(item.nama))]),
+                      _c("td", [_vm._v(_vm._s(item.nama_barang))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(item.kode_batch))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(item.sisa_stok))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(item.exp_date))]),
                       _vm._v(" "),
                       _c(
                         "td",
@@ -641,11 +720,13 @@ __webpack_require__.r(__webpack_exports__);
 var EventBus = new vue__WEBPACK_IMPORTED_MODULE_0___default.a();
 var formData = {
   id: '',
-  nama: '',
-  jk: null,
-  affling: null,
-  no_hp: null,
-  jabatan_id: null
+  barang_id: null,
+  kode_batch: null,
+  jumlah_pesanan: 0,
+  jumlah_masuk: 0,
+  exp_date: '',
+  harga_satuan: null,
+  harga_jual: null
 };
 
 /***/ }),

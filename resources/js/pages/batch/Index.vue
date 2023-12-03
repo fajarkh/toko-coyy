@@ -26,13 +26,19 @@
             <template v-slot:default>
                 <thead>
                     <tr>
-                        <th class="text-left">Nama</th>
+                        <th class="text-left">Nama Barang</th>
+                        <th class="text-left">Kode Batch</th>
+                        <th class="text-left">Sisa Stok</th>
+                        <th class="text-left">Tanggal Kadaluarsa</th>
                         <th class="text-left">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="item in items">
-                        <td>{{ item.nama }}</td>
+                        <td>{{ item.nama_barang }}</td>
+                        <td>{{ item.kode_batch }}</td>
+                        <td>{{ item.sisa_stok }}</td>
+                        <td>{{ item.exp_date }}</td>
                         <td>
                             <v-btn @click.prevent="edit(item)">Edit</v-btn>
                             <v-btn color="error" @click.prevent="deleteItem(item.id)">Hapus</v-btn>

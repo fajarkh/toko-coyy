@@ -1,11 +1,11 @@
 <template>
     <v-row>
         <v-col cols="12">
-            <v-text-field label="Nama*" v-model="formData.nama">
+            <v-text-field label="Nama*" v-model="formData.nama" :error-messages="allError.nama">
             </v-text-field>
         </v-col>
         <v-col cols="12">
-            <v-text-field label="Merek*" v-model="formData.merek">
+            <v-text-field label="Merek" v-model="formData.merek" :error-messages="allError.merek">
             </v-text-field>
         </v-col>
         <v-col cols="12">
@@ -40,7 +40,10 @@ export default {
         this.populateKategoriSelect();
     },
     created() {
-        EventBus.$on('sendErrors', (val) => { this.allError = val });
+        EventBus.$on('sendErrors', (val) => {
+            this.allError = val
+            console.log(this.allError);
+        });
     }
 }
 </script>
