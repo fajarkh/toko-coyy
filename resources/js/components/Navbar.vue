@@ -15,18 +15,22 @@
                     <v-list-item-title>About</v-list-item-title>
                 </v-list-item-content>
             </v-list-item> -->
-            <!-- <v-list-item link exact :to="{ name: 'contact' }">
-                <v-list-item-action>
-                    <v-icon>mdi-email</v-icon>
-                </v-list-item-action>
+            <v-list-item link exact :to="{ name: 'transaksi-index' }">
+                <v-list-item-action><v-icon>mdi-cash-multiple</v-icon></v-list-item-action>
                 <v-list-item-content>
-                    <v-list-item-title>Contact</v-list-item-title>
+                    <v-list-item-title>Transaksi</v-list-item-title>
                 </v-list-item-content>
-            </v-list-item> -->
+            </v-list-item>
             <v-list-item link exact :to="{ name: 'barang-index' }">
                 <v-list-item-action><v-icon>mdi-cube</v-icon></v-list-item-action>
                 <v-list-item-content>
                     <v-list-item-title>Barang</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+            <v-list-item link exact :to="{ name: 'batch-index' }">
+                <v-list-item-action><v-icon>mdi-cube</v-icon></v-list-item-action>
+                <v-list-item-content>
+                    <v-list-item-title>Batch</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
             <v-list-item link exact :to="{ name: 'kategori-index' }">

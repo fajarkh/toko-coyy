@@ -24,6 +24,7 @@ Route::prefix('select-ajax')->group(function () {
 });
 
 Route::resource('barang', 'BarangController');
+Route::resource('batch', 'BatchController');
 Route::resource('kategori', 'KategoriController');
 Route::resource('jabatan', 'JabatanController');
 Route::resource('pelanggan', 'PelangganController');

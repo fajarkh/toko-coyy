@@ -1,6 +1,5 @@
 import Homepage from '../pages/Homepage.vue'
 import About from '../pages/About.vue'
-import Contact from '../pages/Contact.vue'
 
 export default {
     mode: 'history',
@@ -16,14 +15,19 @@ export default {
             component: About,
         },
         {
-            path: '/contact',
-            name: 'contact',
-            component: Contact,
+            path: '/transaksi',
+            name: 'transaksi-index',
+            component: () => import('../pages/transaksi/Index.vue' /* webpackChunkName: "resource/js/components/pages/transaksi/index" */)
         },
         {
             path: '/barang',
             name: 'barang-index',
             component: () => import('../pages/barang/Index.vue' /* webpackChunkName: "resource/js/components/pages/barang/index" */)
+        },
+        {
+            path: '/batch',
+            name: 'batch-index',
+            component: () => import('../pages/batch/Index.vue' /* webpackChunkName: "resource/js/components/pages/batch/index" */)
         },
         {
             path: '/kategori',

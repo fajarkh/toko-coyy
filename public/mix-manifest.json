@@ -2,7 +2,9 @@
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
     "/resource/js/components/pages/barang/index.js": "/resource/js/components/pages/barang/index.js",
+    "/resource/js/components/pages/batch/index.js": "/resource/js/components/pages/batch/index.js",
     "/resource/js/components/pages/jabatan/index.js": "/resource/js/components/pages/jabatan/index.js",
     "/resource/js/components/pages/kategori/index.js": "/resource/js/components/pages/kategori/index.js",
-    "/resource/js/components/pages/pelanggan/index.js": "/resource/js/components/pages/pelanggan/index.js"
+    "/resource/js/components/pages/pelanggan/index.js": "/resource/js/components/pages/pelanggan/index.js",
+    "/resource/js/components/pages/transaksi/index.js": "/resource/js/components/pages/transaksi/index.js"
 }
